@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js">
+    <script src="/js/bootstrap.min.js"></script> 
+    <link href="/css/bootstrap.min.css" rel="stylesheet">   
+	<title>跟帖</title>
+
+</head>
+<body>
+
+	<form>
+		 <input type="hidden" name="id" value="<%=xingming%>" id='bh'>
+		 <div class="form-group">
+	       <label>姓名</label>
+	       <input type="text" class="form-control" name="xingming" placeholder="姓名" id="name" />
+	     </div>
+	     <div class="form-group">
+	       <label>跟帖</label>
+	       <textarea type="text" class="form-control" name="liuyan" id="liuyan" ></textarea>
+	     </div>
+		 <button type="button" name="submit" class="btn btn-primary" id="btn" >提交</button>
+	</form>
+	<script>
+		$('#btn').click(function(){
+
+			$.post('/gen',{
+			hui:$('#bh').val(),
+			xingming:$('#name').val(),
+			liuyan:$('#liuyan').val(),
+
+			},function(result){
+
+				if(result==1){
+					alert('成功');
+					window.location.href='/'
+				}
+		})
+		})	
+	</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js">
+    <script src="/js/bootstrap.min.js"></script> 
+    <link href="/css/bootstrap.min.css" rel="stylesheet">   
+	<title>首页</title>
+</head>
+<body>
+	<h1>发表留言</h1>
+	<form>
+     <div class="form-group">
+       <label>姓名</label>
+       <input type="text" class="form-control" name="xingming" placeholder="姓名" id="name" />
+     </div>
+     <div class="form-group">
+       <label>留言</label>
+       <textarea type="text" class="form-control" name="liuyan" id="liuyan" ></textarea>
+     </div>
+     <div class="form-group">
+       <button type="button" name="submit" class="btn btn-primary" id="btn" >提交</button>
+     </div>
+     <div class="alert alert-success" id="ts">
+     	发表成功
+     </div>
+      <div class="alert alert-warning" id="sb">
+     	发表失败
+     </div>
+   </form>
+   <div id="liu">
+   	
+   </div>
+   <div id="huida">
+   	
+   </div>
+   <nav aria-label="Page navigation">
+	  <ul class="pagination">
+	    <li>
+	      <a href="#" aria-label="Previous">
+	        <span aria-hidden="true">&laquo;</span>
+	      </a>
+	    </li>
+	    <% for(var i=0;i< pagea; i++){%>
+	    <li class="yemaanniu" data-page="<%=i%>"><a href="#"><%=i+1%></a></li>
+	    <%}%>
+	   <!--  <li class="yemaanniu" data-page="1"><a href="#">2</a></li>
+	    <li class="yemaanniu" data-page="2"><a href="#">3</a></li>
+	    <li class="yemaanniu" data-page="3"><a href="#">4</a></li>
+	    <li class="yemaanniu" data-page="4"><a href="#">5</a></li> -->
+	    <li>
+	      <a href="#" aria-label="Next">
+	        <span aria-hidden="true">&raquo;</span>
+	      </a>
+	    </li>
+	  </ul>
+	</nav>
+	<script>
+	
+
+
+	$('.yemaanniu:first').addClass('active');
+	$('.yemaanniu').click(function(){
+		var page=parseInt($(this).attr('data-page'));
+		fn(page);
+		$(this).addClass('active').siblings().removeClass('active');
+
+	})
+
+	//ajax读取
+	function fn(page){
+		$('#liu').html('');
+		$.get('/du?page='+page,function(result){
+		
+		var html='';
+		for(var i=0;i<result.length;i++){
+			html=html+'<p><span>'+result[i].xingming+'说：</span><span>'+result[i].liuyan+'</span><span>'+result[i].shijian+'</span><span><a href="/shanchu?id='+result[i]._id+'&name='+result[i].xingming+'">删除</a></span><span><a href="/xiugai?id='+result[i].xingming+'">修改</a></span><span><a href="/gentie?id='+result[i].xingming+'">跟帖</a></span></p>';
+			}
+		$('#liu').prepend(html);
+		})
+	}
+	//ajax读取跟帖
+	function fngen(){
+		$('#huida').html('');
+		$.get('/dugentie',function(result){
+		
+		var html='';
+		for(var i=0;i<result.length;i++){
+			html=html+'<p><span>'+result[i].xingming+'回答'+result[i].hui+'</span><span>说：</span><span>'+result[i].liuyan+'</span><span>'+result[i].shijian+'</span><span><a href="/shangentie?id='+result[i]._id+'">删除</a></span></p>';
+			}
+		$('#huida').prepend(html);
+		})
+	}
+	
+	//ajax提交
+		$('#btn').click(function(){
+			var html='';
+			$.post('/tijiao',{
+			xingming:$('#name').val(),
+			liuyan:$('#liuyan').val(),
+
+			},function(result){
+				if(result==1){
+					$('#ts').fadeIn();
+					html=html+'<p><span>'+$('#name').val()+'说：</span><span>'+$('#liuyan').val()+'</span><span>'+new Date()+'</span><span><a href="">删除</a></span><span><a href="">修改</a></span></p>';
+					$('#liu').prepend(html);
+					$('#ts').fadeOut();
+				}else if(result==-1){
+					$('#sb').fadeIn();
+					$('#sb').fadeOut();
+				}else if(result==0){
+					alert('用户名被占用')
+				}
+				
+			})
+		})
+		fn(0);
+		fngen();
+		
+		
+		
+	</script>
+	<style>
+		.alert{display: none;}
+		#liu p{border-bottom: 1px solid #eee;margin-bottom: 20px;padding-bottom: 20px;}
+		#liu p span{display: inline-block;padding: 0 10px;}
+		#huida{padding-left: 20px;}
+		#huida p span{display: inline-block;padding: 0 10px;}
+	</style>
+</body>
+</html>

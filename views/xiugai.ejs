@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js">
+    <script src="/js/bootstrap.min.js"></script> 
+    <link href="/css/bootstrap.min.css" rel="stylesheet">   
+	<title>修改</title>
+
+</head>
+<body>
+
+	<form>
+		 <input type="hidden" name="id" value="<%=xingming%>" id='bh'>
+		 <textarea type="text" class="form-control" name="liuyan" id="liuyan" ></textarea><br />
+		 <button type="button" name="submit" class="btn btn-primary" id="btn" >提交</button>
+	</form>
+	<script>
+		$('#btn').click(function(){
+
+			$.post('/xiubc',{
+			xingming:$('#bh').val(),
+			liuyan:$('#liuyan').val(),
+
+			},function(result){
+
+				if(result==1){
+					alert('修改成功');
+					window.location.href='/'
+				}
+		})
+		})	
+	</script>
+</body>
+</html>
